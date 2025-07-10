@@ -5,7 +5,7 @@ import auth from '../middleware/auth.js';
 const router = express.Router();
 
 // Get all sales with filters and pagination
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const {
       page = 1,
@@ -92,7 +92,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Get sales summary/statistics
-router.get('/summary', auth, async (req, res) => {
+router.get('/summary', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     
@@ -238,7 +238,7 @@ router.get('/summary', auth, async (req, res) => {
 });
 
 // Get single sale details
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const sale = await Phone.findOne({
       _id: req.params.id,
@@ -267,7 +267,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Update sale details (like customer info)
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     // Find the sold phone for this user
     const sale = await Phone.findOne({

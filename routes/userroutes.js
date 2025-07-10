@@ -129,7 +129,7 @@ router.post('/login', validateLogin, async (req, res) => {
 });
 
 // Get current user profile
-router.get('/profile', auth, async (req, res) => {
+router.get('/profile', async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     
@@ -160,7 +160,7 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // Update user profile
-router.put('/profile', auth, upload.single('profileImage'), async (req, res) => {
+router.put('/profile', upload.single('profileImage'), async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     
@@ -211,7 +211,7 @@ router.put('/profile', auth, upload.single('profileImage'), async (req, res) => 
 });
 
 // Change password
-router.put('/change-password', auth, async (req, res) => {
+router.put('/change-password', async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
@@ -266,7 +266,7 @@ router.put('/change-password', auth, async (req, res) => {
 });
 
 // Get user dashboard stats
-router.get('/dashboard', auth, async (req, res) => {
+router.get('/dashboard', async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     const stats = await user.getStats();
@@ -335,7 +335,7 @@ router.get('/dashboard', auth, async (req, res) => {
 });
 
 // Verify token (for frontend to check if token is valid)
-router.get('/verify-token', auth, async (req, res) => {
+router.get('/verify-token', async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     
@@ -368,7 +368,7 @@ router.get('/verify-token', auth, async (req, res) => {
 });
 
 // Logout (invalidate token - frontend should remove token from storage)
-router.post('/logout', auth, async (req, res) => {
+router.post('/logout', async (req, res) => {
   try {
     // In a more sophisticated setup, you might want to blacklist the token
     // For now, we'll just send a success response

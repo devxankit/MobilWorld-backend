@@ -7,7 +7,7 @@ import { validatePhone, validateSale } from '../middleware/validation.js';
 const router = express.Router();
 
 // Get all phones for a user with search and filters
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const {
       page = 1,
@@ -78,7 +78,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Get single phone by ID
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const phone = await Phone.findOne({
       _id: req.params.id,
@@ -106,7 +106,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Search phones by model or IMEI
-router.get('/search/:query', auth, async (req, res) => {
+router.get('/search/:query', async (req, res) => {
   try {
     const { query } = req.params;
     
@@ -133,7 +133,7 @@ router.get('/search/:query', auth, async (req, res) => {
 });
 
 // Add new phone
-router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res) => {
+router.post('/', upload.array('images', 5), validatePhone, async (req, res) => {
   try {
     const phoneData = {
       ...req.body,
@@ -174,7 +174,7 @@ router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res
 });
 
 // Update phone
-router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
+router.put('/:id', upload.array('images', 5), async (req, res) => {
   try {
     const phone = await Phone.findOne({
       _id: req.params.id,
@@ -289,7 +289,7 @@ router.post('/:id/sell', auth, validateSale, async (req, res) => {
 });
 
 // Delete phone
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const phone = await Phone.findOneAndDelete({
       _id: req.params.id,
