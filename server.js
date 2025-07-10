@@ -29,14 +29,8 @@ app.use(compression());
 
 // CORS configuration
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    process.env.FRONTEND_URL,
-    process.env.FRONTEND_URL_WEB
-    
-  ].filter(Boolean),
-  credentials: true,
+  origin: '*', // Allow any origin
+  credentials: false, // Credentials not allowed with '*'
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
 }));
@@ -46,7 +40,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Static files for uploads
-app.use('/uploads', express.static('uploads'));
+// CORS for static files
+app.use('/uploads', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+}, express.static('uploads'));
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI , {

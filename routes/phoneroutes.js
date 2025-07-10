@@ -6,7 +6,7 @@ import { validatePhone, validateSale } from '../middleware/validation.js';
 
 const router = express.Router();
 
-// Get all phones for a user with search and filters
+// PUBLIC: Get all phones (no authentication required)
 router.get('/', async (req, res) => {
   try {
     const {
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     } = req.query;
 
     // Build query
-    const query = { userId: req.user.id };
+    const query = {};
     
     if (search) {
       query.$or = [
@@ -77,12 +77,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get single phone by ID
+// PUBLIC: Get single phone by ID (no authentication required)
 router.get('/:id', async (req, res) => {
   try {
     const phone = await Phone.findOne({
-      _id: req.params.id,
-      userId: req.user.id
+      _id: req.params.id
     });
 
     if (!phone) {
@@ -105,13 +104,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Search phones by model or IMEI
+// PUBLIC: Search phones by model or IMEI (no authentication required)
 router.get('/search/:query', async (req, res) => {
   try {
     const { query } = req.params;
     
     const phones = await Phone.find({
-      userId: req.user.id,
       $or: [
         { modelNo: { $regex: query, $options: 'i' } },
         { imei1: { $regex: query, $options: 'i' } },
