@@ -29,7 +29,10 @@ app.use(compression());
 
 // CORS configuration
 app.use(cors({
-  origin: '*', // Allow any origin
+  origin: [
+    'https://mobi-world-tdx7.vercel.app',
+    'http://localhost:3000'
+  ], // Allow Vercel frontend and local dev
   credentials: false, // Credentials not allowed with '*'
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
