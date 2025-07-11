@@ -131,7 +131,7 @@ router.get('/search/:query', async (req, res) => {
 });
 
 // Add new phone
-router.post('/', upload.array('images', 5), validatePhone, async (req, res) => {
+router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res) => {
   try {
     const phoneData = {
       ...req.body,
