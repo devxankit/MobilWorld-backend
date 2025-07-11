@@ -172,7 +172,7 @@ router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res
 });
 
 // Update phone
-router.put('/:id', upload.array('images', 5), async (req, res) => {
+router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
   try {
     const phone = await Phone.findOne({
       _id: req.params.id,
@@ -287,7 +287,7 @@ router.post('/:id/sell', auth, validateSale, async (req, res) => {
 });
 
 // Delete phone
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const phone = await Phone.findOneAndDelete({
       _id: req.params.id,
