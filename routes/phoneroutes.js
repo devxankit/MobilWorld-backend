@@ -140,7 +140,8 @@ router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res
     // Add image information if files were uploaded
     if (req.files && req.files.length > 0) {
       phoneData.images = req.files.map(file => ({
-        filename: file.filename,
+        url: file.path, // Cloudinary URL
+        public_id: file.filename || file.public_id, // fallback for compatibility
         originalName: file.originalname,
         mimetype: file.mimetype,
         size: file.size
@@ -213,7 +214,8 @@ router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
     // Add new images if uploaded
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map(file => ({
-        filename: file.filename,
+        url: file.path, // Cloudinary URL
+        public_id: file.filename || file.public_id,
         originalName: file.originalname,
         mimetype: file.mimetype,
         size: file.size

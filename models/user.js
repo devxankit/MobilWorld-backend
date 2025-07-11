@@ -67,7 +67,9 @@ const userSchema = new mongoose.Schema({
     }
   },
   profileImage: {
-    filename: String,
+    url: String, // Cloudinary URL
+    public_id: String, // Cloudinary public_id
+    filename: String, // for backward compatibility
     originalName: String,
     mimetype: String,
     size: Number

@@ -187,7 +187,8 @@ router.put('/profile', auth, upload.single('profileImage'), async (req, res) => 
     // Handle profile image upload
     if (req.file) {
       user.profileImage = {
-        filename: req.file.filename,
+        url: req.file.path, // Cloudinary URL
+        public_id: req.file.filename || req.file.public_id,
         originalName: req.file.originalname,
         mimetype: req.file.mimetype,
         size: req.file.size
