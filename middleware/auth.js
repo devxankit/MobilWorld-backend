@@ -13,10 +13,11 @@ const auth = (req, res, next) => {
     return res.status(401).json({ success: false, message: 'No token provided' });
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'Ankit');
     req.user = { id: decoded.userId };
     next();
   } catch (err) {
+    console.error('JWT verification error:', err); // Log the actual error
     return res.status(401).json({ success: false, message: 'Invalid token' });
   }
 };
