@@ -1,7 +1,7 @@
 import express from 'express';
 import Phone from '../models/phone.js';
 import auth from '../middleware/auth.js';
-import upload from '../middleware/upload.js';
+import { upload, uploadToCloudinary } from '../middleware/upload.js';
 import { validatePhone, validateSale } from '../middleware/validation.js';
 
 const router = express.Router();
@@ -131,7 +131,7 @@ router.get('/search/:query', async (req, res) => {
 });
 
 // Add new phone
-router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res) => {
+router.post('/', auth, upload.array('images', 5), uploadToCloudinary, validatePhone, async (req, res) => {
   try {
     const phoneData = {
       ...req.body,
@@ -173,7 +173,7 @@ router.post('/', auth, upload.array('images', 5), validatePhone, async (req, res
 });
 
 // Update phone
-router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
+router.put('/:id', auth, upload.array('images', 5), uploadToCloudinary, async (req, res) => {
   try {
     const phone = await Phone.findOne({
       _id: req.params.id,

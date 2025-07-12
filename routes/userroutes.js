@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import auth from '../middleware/auth.js';
-import upload from '../middleware/upload.js';
+import { upload, uploadToCloudinary } from '../middleware/upload.js';
 import { validateRegister, validateLogin } from '../middleware/validation.js';
 
 const router = express.Router();
@@ -160,7 +160,7 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // Update user profile
-router.put('/profile', auth, upload.single('profileImage'), async (req, res) => {
+router.put('/profile', auth, upload.single('profileImage'), uploadToCloudinary, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     
