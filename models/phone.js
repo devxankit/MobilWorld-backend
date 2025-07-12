@@ -117,6 +117,8 @@ phoneSchema.index({ modelNo: 1 });
 phoneSchema.index({ status: 1 });
 phoneSchema.index({ userId: 1 });
 phoneSchema.index({ purchaseDate: -1 });
+// Add compound unique index to prevent duplicate models for same user
+phoneSchema.index({ modelNo: 1, userId: 1 }, { unique: true });
 
 // Virtual field for total investment
 phoneSchema.virtual('totalInvestment').get(function() {
@@ -130,6 +132,11 @@ phoneSchema.virtual('potentialProfit').get(function() {
 
 // Method to mark phone as sold
 phoneSchema.methods.markAsSold = function(customerDetails) {
+  // Check if phone is in stock before selling
+  if (this.status !== 'in_stock') {
+    throw new Error('Phone can only be sold if it is in stock');
+  }
+  
   this.status = 'sold';
   this.soldDate = new Date();
   this.soldTo = customerDetails;

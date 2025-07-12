@@ -137,6 +137,20 @@ router.post('/', auth, upload.array('images', 5), uploadToCloudinary, validatePh
       ...req.body,
       userId: req.user.id
     };
+    
+    // Check if phone model already exists for this user
+    const existingPhone = await Phone.findOne({
+      modelNo: phoneData.modelNo,
+      userId: req.user.id
+    });
+    
+    if (existingPhone) {
+      return res.status(400).json({
+        success: false,
+        message: 'A phone with this model number already exists in your inventory'
+      });
+    }
+    
     // Add image information if files were uploaded
     if (req.files && req.files.length > 0) {
       phoneData.images = req.files.map(file => ({
@@ -160,7 +174,7 @@ router.post('/', auth, upload.array('images', 5), uploadToCloudinary, validatePh
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
-        message: error.message
+        message: 'A phone with this model number already exists in your inventory'
       });
     }
     
@@ -254,10 +268,19 @@ router.post('/:id/sell', auth, validateSale, async (req, res) => {
       });
     }
 
+    // Check if phone is already sold
     if (phone.status === 'sold') {
       return res.status(400).json({
         success: false,
         message: 'Phone is already sold'
+      });
+    }
+
+    // Check if phone is in stock
+    if (phone.status !== 'in_stock') {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone can only be sold if it is in stock'
       });
     }
 
