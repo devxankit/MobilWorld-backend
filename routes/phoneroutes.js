@@ -138,19 +138,6 @@ router.post('/', auth, upload.array('images', 5), uploadToCloudinary, validatePh
       userId: req.user.id
     };
     
-    // Check if phone model already exists for this user
-    const existingPhone = await Phone.findOne({
-      modelNo: phoneData.modelNo,
-      userId: req.user.id
-    });
-    
-    if (existingPhone) {
-      return res.status(400).json({
-        success: false,
-        message: 'A phone with this model number already exists in your inventory'
-      });
-    }
-    
     // Add image information if files were uploaded
     if (req.files && req.files.length > 0) {
       phoneData.images = req.files.map(file => ({
@@ -171,13 +158,6 @@ router.post('/', auth, upload.array('images', 5), uploadToCloudinary, validatePh
       data: phone
     });
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: 'A phone with this model number already exists in your inventory'
-      });
-    }
-    
     res.status(500).json({
       success: false,
       message: 'Error adding phone',
