@@ -118,7 +118,7 @@ phoneSchema.index({ status: 1 });
 phoneSchema.index({ userId: 1 });
 phoneSchema.index({ purchaseDate: -1 });
 // Add compound unique index to prevent duplicate models for same user
-phoneSchema.index({ modelNo: 1, userId: 1 }, { unique: true });
+phoneSchema.index({ modelNo: 1, userId: 1 }, { unique: false });
 
 // Virtual field for total investment
 phoneSchema.virtual('totalInvestment').get(function() {
