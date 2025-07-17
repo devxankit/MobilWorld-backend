@@ -60,6 +60,7 @@ router.get('/', async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Phones fetched successfully',
       data: phones,
       pagination: {
         currentPage: Number(page),
@@ -93,6 +94,7 @@ router.get('/:id', async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Phone fetched successfully',
       data: phone
     });
   } catch (error) {
@@ -119,6 +121,7 @@ router.get('/search/:query', async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Phones matching search query fetched successfully',
       data: phones
     });
   } catch (error) {
@@ -158,6 +161,13 @@ router.post('/', auth, upload.array('images', 5), uploadToCloudinary, validatePh
       data: phone
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: 'A phone with this IMEI or Serial Number already exists.',
+        error: 'Duplicate entry'
+      });
+    }
     res.status(500).json({
       success: false,
       message: 'Error adding phone',

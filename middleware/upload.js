@@ -13,7 +13,7 @@ const cloudinaryStorage = multer.memoryStorage();
 
 const upload = multer({
   storage: cloudinaryStorage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 27 * 1024 * 1024 }, // 27MB limit
   fileFilter: (req, file, cb) => {
     const allowed = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
     if (allowed.includes(file.mimetype)) {

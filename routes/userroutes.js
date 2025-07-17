@@ -145,6 +145,7 @@ router.get('/profile', auth, async (req, res) => {
 
     res.json({
       success: true,
+      message: 'User profile fetched successfully',
       data: {
         user,
         stats
@@ -313,6 +314,7 @@ router.get('/dashboard', auth, async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Dashboard data fetched successfully',
       data: {
         user: {
           name: user.name,

@@ -73,6 +73,7 @@ router.get('/', auth, async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Sales fetched successfully',
       data: sales,
       pagination: {
         currentPage: Number(page),
@@ -211,6 +212,7 @@ router.get('/summary', auth, async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Sales summary fetched successfully',
       data: {
         overall: overallSummary[0] || {
           totalSales: 0,
@@ -255,6 +257,7 @@ router.get('/:id', auth, async (req, res) => {
 
     res.json({
       success: true,
+      message: 'Sale details fetched successfully',
       data: sale
     });
   } catch (error) {
