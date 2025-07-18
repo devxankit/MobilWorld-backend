@@ -79,7 +79,24 @@ const phoneSchema = new mongoose.Schema({
   soldTo: {
     customerName: String,
     customerMobile: String,
-    customerAddress: String
+    customerAddress: String,
+    paymentType: {
+      type: String,
+      enum: ['online', 'cash'],
+      required: false
+    },
+    exchangeModel: {
+      type: String,
+      required: false
+    },
+    exchangeModelIMEI: {
+      type: String,
+      required: false
+    },
+    exchangeModelPrice: {
+      type: Number,
+      required: false
+    }
   },
   profit: {
     type: Number,

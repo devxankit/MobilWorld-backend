@@ -274,18 +274,25 @@ router.post('/:id/sell', auth, validateSale, async (req, res) => {
       });
     }
 
-    const { customerName, customerMobile, customerAddress, salePrice } = req.body;
+    const { customerName, customerMobile, customerAddress, salePrice, paymentType, exchangeModel, exchangeModelIMEI, exchangeModelPrice } = req.body;
     
     // Update sale price if provided
     if (salePrice) {
       phone.salePrice = salePrice;
     }
 
-    await phone.markAsSold({
-      customerName,
-      customerMobile,
-      customerAddress
-    });
+    // Build soldTo object with optional fields
+    const soldTo = {
+      ...(customerName && { customerName }),
+      ...(customerMobile && { customerMobile }),
+      ...(customerAddress && { customerAddress }),
+      ...(paymentType && { paymentType }),
+      ...(exchangeModel && { exchangeModel }),
+      ...(exchangeModelIMEI && { exchangeModelIMEI }),
+      ...(exchangeModelPrice && { exchangeModelPrice })
+    };
+
+    await phone.markAsSold(soldTo);
 
     res.json({
       success: true,
