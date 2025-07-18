@@ -96,6 +96,14 @@ const phoneSchema = new mongoose.Schema({
     exchangeModelPrice: {
       type: Number,
       required: false
+    },
+    cashAmount: {
+      type: Number,
+      required: false
+    },
+    onlineAmount: {
+      type: Number,
+      required: false
     }
   },
   profit: {

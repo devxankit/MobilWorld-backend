@@ -274,7 +274,7 @@ router.post('/:id/sell', auth, validateSale, async (req, res) => {
       });
     }
 
-    const { customerName, customerMobile, customerAddress, salePrice, paymentType, exchangeModel, exchangeModelIMEI, exchangeModelPrice } = req.body;
+    const { customerName, customerMobile, customerAddress, salePrice, paymentType, exchangeModel, exchangeModelIMEI, exchangeModelPrice, cashAmount, onlineAmount } = req.body;
     
     // Update sale price if provided
     if (salePrice) {
@@ -289,7 +289,9 @@ router.post('/:id/sell', auth, validateSale, async (req, res) => {
       ...(paymentType && { paymentType }),
       ...(exchangeModel && { exchangeModel }),
       ...(exchangeModelIMEI && { exchangeModelIMEI }),
-      ...(exchangeModelPrice && { exchangeModelPrice })
+      ...(exchangeModelPrice && { exchangeModelPrice }),
+      ...(cashAmount !== undefined && { cashAmount }),
+      ...(onlineAmount !== undefined && { onlineAmount })
     };
 
     await phone.markAsSold(soldTo);
