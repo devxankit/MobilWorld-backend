@@ -56,26 +56,12 @@ router.get('/', async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
-    // Map phones to include required fields at root level
-    const phonesWithExtraFields = phones.map(phone => {
-      const phoneObj = phone.toObject();
-      const soldTo = phoneObj.soldTo || {};
-      return {
-        ...phoneObj,
-        cashAmount: soldTo.cashAmount,
-        onlineAmount: soldTo.onlineAmount,
-        exchangeModel: soldTo.exchangeModel,
-        exchangeModelIMEI: soldTo.exchangeModelIMEI,
-        exchangeModelPrice: soldTo.exchangeModelPrice
-      };
-    });
-
     const total = await Phone.countDocuments(query);
 
     res.json({
       success: true,
       message: 'Phones fetched successfully',
-      data: phonesWithExtraFields,
+      data: phones,
       pagination: {
         currentPage: Number(page),
         totalPages: Math.ceil(total / limit),
@@ -212,17 +198,45 @@ router.put('/:id', auth, upload.array('images', 5), uploadToCloudinary, async (r
       }
     });
 
-    // Handle optional sale fields
-    const { salePrice, customerName, customerMobile, customerAddress, saleDate } = req.body;
+    // Handle optional sale fields (all possible soldTo fields)
+    const {
+      salePrice,
+      customerName,
+      customerMobile,
+      customerAddress,
+      paymentType,
+      exchangeModel,
+      exchangeModelIMEI,
+      exchangeModelPrice,
+      cashAmount,
+      onlineAmount,
+      saleDate
+    } = req.body;
     if (salePrice !== undefined) {
       phone.salePrice = salePrice;
     }
-    if (customerName || customerMobile || customerAddress) {
+    if (
+      customerName ||
+      customerMobile ||
+      customerAddress ||
+      paymentType ||
+      exchangeModel ||
+      exchangeModelIMEI ||
+      exchangeModelPrice !== undefined ||
+      cashAmount !== undefined ||
+      onlineAmount !== undefined
+    ) {
       phone.soldTo = {
         ...phone.soldTo,
         ...(customerName && { customerName }),
         ...(customerMobile && { customerMobile }),
-        ...(customerAddress && { customerAddress })
+        ...(customerAddress && { customerAddress }),
+        ...(paymentType && { paymentType }),
+        ...(exchangeModel && { exchangeModel }),
+        ...(exchangeModelIMEI && { exchangeModelIMEI }),
+        ...(exchangeModelPrice !== undefined && { exchangeModelPrice }),
+        ...(cashAmount !== undefined && { cashAmount }),
+        ...(onlineAmount !== undefined && { onlineAmount })
       };
     }
     if (saleDate !== undefined) {
