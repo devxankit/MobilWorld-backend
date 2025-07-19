@@ -56,12 +56,26 @@ router.get('/', async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
+    // Map phones to include required fields at root level
+    const phonesWithExtraFields = phones.map(phone => {
+      const phoneObj = phone.toObject();
+      const soldTo = phoneObj.soldTo || {};
+      return {
+        ...phoneObj,
+        cashAmount: soldTo.cashAmount,
+        onlineAmount: soldTo.onlineAmount,
+        exchangeModel: soldTo.exchangeModel,
+        exchangeModelIMEI: soldTo.exchangeModelIMEI,
+        exchangeModelPrice: soldTo.exchangeModelPrice
+      };
+    });
+
     const total = await Phone.countDocuments(query);
 
     res.json({
       success: true,
       message: 'Phones fetched successfully',
-      data: phones,
+      data: phonesWithExtraFields,
       pagination: {
         currentPage: Number(page),
         totalPages: Math.ceil(total / limit),
