@@ -238,6 +238,7 @@ router.put('/:id', auth, upload.array('images', 5), uploadToCloudinary, async (r
         ...(cashAmount !== undefined && { cashAmount }),
         ...(onlineAmount !== undefined && { onlineAmount })
       };
+      phone.markModified('soldTo');
     }
     if (saleDate !== undefined) {
       phone.soldDate = saleDate ? new Date(saleDate) : new Date();
